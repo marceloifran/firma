@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio</title>
+    <!-- Agrega Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Agrega SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <style>
+        /* Estilos personalizados */
+        #firmaCanvas {
+            border: 1px solid black;
+        }
+
+        /* Estilos para centrar el canvas */
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="text-center mb-4">Bienvenido a la página de inicio</h1>
+                <p class="text-center">Firma aquí:</p>
+                <div class="text-center mt-3">
+                    <div class="canvas-container">
+                        <canvas id="firmaCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary" onclick="guardarFirma()">Guardar Firma y Ver Documento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var canvas = document.getElementById("firmaCanvas");
+        var ctx = canvas.getContext("2d");
+        var firma = false;
+        var prevX = 0;
+        var currX = 0;
+        var prevY = 0;
+        var currY = 0;
+        var dot_flag = false;
+
+        // Ajustar el tamaño del canvas según el ancho de la pantalla
+        canvas.width = window.innerWidth * 0.8; // Por ejemplo, el canvas ocupará el 80% del ancho de la pantalla
+        canvas.height = 200; // Altura fija del canvas
+
+        canvas.addEventListener("mousemove", function (e) {
+            findxy('move', e);
+        }, false);
+        canvas.addEventListener("mousedown", function (e) {
+            findxy('down', e);
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {
+            findxy('up', e);
+        }, false);
+        canvas.addEventListener("mouseout", function (e) {
+            findxy('out', e);
+        }, false);
+
+        function draw() {
+            ctx.beginPath();
+            ctx.moveTo(prevX, prevY);
+            ctx.lineTo(currX, currY);
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function findxy(res, e) {
+            if (res === 'down') {
+                prevX = currX;
+                prevY = currY;
+                currX = e.clientX - canvas.getBoundingClientRect().left;
+                currY = e.clientY - canvas.getBoundingClientRect().top;
+
+                firma = true;
+                dot_flag = true;
+                if (dot_flag) {
+                    ctx.beginPath();
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(currX, currY, 2, 2);
+                    ctx.closePath();
+                    dot_flag = false;
+                }
+            }
+            if (res === 'up' || res === "out") {
+                firma = true; // Se cambió a true para que el evento de guardado pueda funcionar
+            }
+            if (res === 'move') {
+                if (firma) {
+                    prevX = currX;
+                    prevY = currY;
+                    currX = e.clientX - canvas.getBoundingClientRect().left;
+                    currY = e.clientY - canvas.getBoundingClientRect().top;
+                    draw();
+                }
+            }
+        }
+
+        function guardarFirma() {
+            if (firma) {
+                // Convertir el canvas en una imagen
+                var imagenFirma = canvas.toDataURL("image/png");
+
+                // Almacenar la firma en localStorage (o en la forma que desees enviarla al documento.html)
+                localStorage.setItem("firma", imagenFirma);
+
+                // Mostrar mensaje informativo usando SweetAlert
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Estimado',
+                    html: `
+                    <p>Ud. va a recibir los siguientes elementos:</p>
+                    <ul>
+                        <li>Amisa de Trabajo GRAFA OMBU</li>
+                        <li>Pantalón de Trabajo GRAFA OMBU</li>
+                        <li>Par de Botines de Seguridad C/P T: OMBU</li>
+                        <li>Casco de Seguridad con Arnes AMARILLO LIBUS</li>
+                        <li>Mentonera P/ CASCO LIBUS</li>
+                        <li>Chaleco Reflectivo REFLECTIVO S/M</li>
+                        <li>Gafas de Seguridad TRANSPARENTE LIBUS</li>
+                        <li>Gafas de Seguridad OSCURAS LIBUS</li>
+                        <li>Par de Guantes VAQUETA DPS</li>
+                        <li>Chaleco REFLECTIVO S/M</li>
+                        <li>Campera polar POLAR WOK SAFE</li>
+                        <li>Protecto auditivo endoaural Verde LIBUS</li>
+                    </ul>
+                    `,
+                    showCancelButton: false,
+                    confirmButtonText: 'Aceptar'
+                }).then((result) => {
+                    // Redirigir a documento.html
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Firma guardada',
+                        text: 'La firma ha sido guardada correctamente.'
+                    });
+                    // window.location.href = "documento.html";
+                });
+            } else {
+                // Si no hay firma, mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, firma antes de continuar.'
+                });
+            }
+        }
+    </script>
+</body>
+</html>

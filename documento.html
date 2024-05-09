@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documento</title>
+    <style>
+        /* Estilos para las líneas divisorias */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <table style="height: 25px">
+        <tr>
+            <td style="text-align: center" colspan="10">
+                CONSTANCIA DE ENTREGA DE ROPA Y TRABAJO Y ELEMENTOS DE PROTECCION PERSONAL <br>
+                (Resolucion S.R.T Nº 299/2011)
+            </td>
+            <td style="text-align: right;">
+                <img src="https://media.licdn.com/dms/image/C4E0BAQGhkLET1-UZPQ/company-logo_200_200/0/1641320084310?e=2147483647&v=beta&t=Oknns7rgyanOzrEi0fSiusmVYEAt3DdLZ5fxbNRzk0I" alt="" style="width: 50px; height: 50px;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">Razón Social</td>
+            <td colspan="4">BMI S.A.</td>
+            <td colspan="2">C.U.I.T. Nº:</td>
+            <td colspan="4">30-69070075-8</td>
+        </tr>
+        <tr>
+            <td colspan="1">Dirección:</td>
+            <td colspan="4">Av. Alfredo Palacios Nº 2430</td>
+            <td colspan="1">Localidad:</td>
+            <td colspan="1">Salta</td>
+            <td colspan="1">CP.:</td>
+            <td colspan="1">4400</td>
+            <td colspan="1">Provincia:</td>
+            <td colspan="1">Salta</td>
+        </tr>
+        <tr>
+            <td colspan="2">Apellido y Nombre del Trabajador: </td>
+            <td colspan="4">NESELIS DIEGO</td>
+            <td colspan="2">D.N.I Nº:</td>
+            <td colspan="3">21380879</td>
+        </tr>
+        <tr>
+            <td colspan="5">Breve descripción del/lospuestos/s de trabajo en el/los cual/es se desempeña el trabajador:</td>
+            <td colspan="6">Elementos de Protección Personal necesarios para el trabajador, según el/los puesto/s de trabajo:</td>
+        </tr>
+        <tr>
+            <td colspan="5">Operario de Tareas Generales en Obra: Excavación Manual y Movimiento de Sueldos -Corte y Armado de Hierros - Armado de Encofrados - Elaboración, vertido y vibrado de Hº Aº - Trabajos de Albañilería en General.-</td>
+            <td colspan="6">Casco de Seguridad / Gafas de Seguridad Transparentes / Guantes de Vaqueta / Guantes de Acrilonitrilo / Mascarilla libre de mantenimiento de polvos / Botines de Seguridad con Puntera / Protectores Auditivos. -</td>
+        </tr>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Nombre</th>
+                <th>TIPO/MODELO</th>
+                <th>MARCA</th>
+                <th>POSEE CERTIFICACIÓN (SI/NO)</th>
+                <th>CANTIDAD</th>
+                <th>FECHA DE ENTREGA</th>
+                <th>FIRMA DEL TRABAJADOR</th>
+            </tr>
+        </thead>
+        <tbody id="tablaBody">
+            <!-- Aquí se agregarán las filas dinámicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        // Datos de las firmas
+        var datosFirmas = [
+            { nombre: "Amisa de Trabajo GRAFA OMBU", tipo: "Amisa de Trabajo", marca: "GRAFA OMBU", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Pantalón de Trabajo GRAFA OMBU", tipo: "Pantalón de Trabajo", marca: "GRAFA OMBU", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Par de Botines de Seguridad C/P T: OMBU", tipo: "Par de Botines de Seguridad", marca: "OMBU", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Casco de Seguridad con Arnes AMARILLO LIBUS", tipo: "Casco de Seguridad", marca: "LIBUS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Mentonera P/ CASCO LIBUS", tipo: "Mentonera P/ CASCO", marca: "LIBUS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Chaleco Reflectivo REFLECTIVO S/M", tipo: "Chaleco Reflectivo", marca: "REFLECTIVO S/M", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Gafas de Seguridad TRANSPARENTE LIBUS", tipo: "Gafas de Seguridad", marca: "LIBUS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Gafas de Seguridad OSCURAS LIBUS", tipo: "Gafas de Seguridad", marca: "LIBUS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Par de Guantes VAQUETA DPS", tipo: "Par de Guantes", marca: "DPS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Chaleco REFLECTIVO S/M", tipo: "Chaleco Reflectivo", marca: "S/M", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Campera polar POLAR WOK SAFE", tipo: "Campera polar", marca: "POLAR WOK SAFE", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            { nombre: "Protecto auditivo endoaural Verde LIBUS", tipo: "Protecto auditivo endoaural", marca: "LIBUS", certificacion: "SI", cantidad: 1, fecha: obtenerFechaHoy() },
+            // Agrega más elementos si es necesario
+        ];
+
+        // Función para obtener la fecha de hoy en el formato deseado (DD/MM/AAAA)
+        function obtenerFechaHoy() {
+            var hoy = new Date();
+            var dia = hoy.getDate();
+            var mes = hoy.getMonth() + 1;
+            var año = hoy.getFullYear();
+            return (dia < 10 ? '0' : '') + dia + '/' + (mes < 10 ? '0' : '') + mes + '/' + año;
+        }
+
+        // Obtener el cuerpo de la tabla
+        var tablaBody = document.getElementById("tablaBody");
+
+        // Iterar sobre los datos de firmas y agregar una fila por cada uno
+        datosFirmas.forEach(function(firma, index) {
+            // Crear una nueva fila
+            var fila = document.createElement("tr");
+
+            // Llenar la fila con datos
+            fila.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${firma.nombre}</td>
+                <td>${firma.tipo}</td>
+                <td>${firma.marca}</td>
+                <td>${firma.certificacion}</td>
+                <td>${firma.cantidad}</td>
+                <td>${firma.fecha}</td>
+                <td><img src="" alt="Firma del Trabajador" style="width: 150px; height: auto;"></td>
+            `;
+
+            // Recuperar la firma del localStorage
+            var firmaGuardada = localStorage.getItem("firma");
+            
+            // Obtener la celda de la firma y asignar la firma como fuente de la imagen
+            var celdaFirma = fila.querySelector("td:last-child img");
+            celdaFirma.src = firmaGuardada;
+
+            // Agregar la fila al cuerpo de la tabla
+            tablaBody.appendChild(fila);
+        });
+    </script>
+
+    <script>
+        // Crear un nuevo objeto jsPDF
+        var doc = new jsPDF();
+
+        // Agregar contenido al PDF
+        doc.text('¡Este es mi documento PDF!', 10, 10);
+
+        // Guardar el PDF
+        doc.save('documento.pdf');
+    </script>
+</body>
+</html>
