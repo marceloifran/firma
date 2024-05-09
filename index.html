@@ -55,17 +55,14 @@
         canvas.width = window.innerWidth * 0.8; // Por ejemplo, el canvas ocupará el 80% del ancho de la pantalla
         canvas.height = 200; // Altura fija del canvas
 
-        canvas.addEventListener("mousemove", function (e) {
-            findxy('move', e);
-        }, false);
-        canvas.addEventListener("mousedown", function (e) {
+        canvas.addEventListener("touchstart", function (e) {
             findxy('down', e);
         }, false);
-        canvas.addEventListener("mouseup", function (e) {
-            findxy('up', e);
+        canvas.addEventListener("touchmove", function (e) {
+            findxy('move', e);
         }, false);
-        canvas.addEventListener("mouseout", function (e) {
-            findxy('out', e);
+        canvas.addEventListener("touchend", function (e) {
+            findxy('up', e);
         }, false);
 
         function draw() {
@@ -79,37 +76,40 @@
         }
 
         function findxy(res, e) {
+            var touch = e.touches[0];
             if (res === 'down') {
                 prevX = currX;
                 prevY = currY;
-                currX = e.clientX - canvas.getBoundingClientRect().left;
-                currY = e.clientY - canvas.getBoundingClientRect().top;
+                currX = touch.clientX - canvas.getBoundingClientRect().left;
+                currY = touch.clientY - canvas.getBoundingClientRect().top;
 
                 firma = true;
-                dot_flag = true;
+                dot_flag = true; // Establecer dot_flag en true al inicio del dibujo
+                ctx.beginPath();
+                ctx.fillStyle = "black";
+                ctx.fillRect(currX, currY, 2, 2);
+                ctx.closePath();
+            } else if (res === 'up') {
                 if (dot_flag) {
-                    ctx.beginPath();
-                    ctx.fillStyle = "black";
-                    ctx.fillRect(currX, currY, 2, 2);
-                    ctx.closePath();
-                    dot_flag = false;
+                    firma = true; // Se establece en true solo si se ha dibujado algo
+                } else {
+                    firma = false; // Si no se ha dibujado nada, se considera que la firma no está completa
                 }
-            }
-            if (res === 'up' || res === "out") {
-                firma = true; // Se cambió a true para que el evento de guardado pueda funcionar
-            }
-            if (res === 'move') {
+                dot_flag = false; // Detener el dibujo
+            } else if (res === 'move') {
                 if (firma) {
                     prevX = currX;
                     prevY = currY;
-                    currX = e.clientX - canvas.getBoundingClientRect().left;
-                    currY = e.clientY - canvas.getBoundingClientRect().top;
+                    currX = touch.clientX - canvas.getBoundingClientRect().left;
+                    currY = touch.clientY - canvas.getBoundingClientRect().top;
                     draw();
                 }
             }
         }
 
         function guardarFirma() {
+            console.log('Firma:', firma); // Agrega este console.log para verificar el valor de firma
+
             if (firma) {
                 // Convertir el canvas en una imagen
                 var imagenFirma = canvas.toDataURL("image/png");
@@ -147,7 +147,7 @@
                         title: 'Firma guardada',
                         text: 'La firma ha sido guardada correctamente.'
                     });
-                    // window.location.href = "documento.html";
+                     window.location.href = "documento.html";
                 });
             } else {
                 // Si no hay firma, mostrar mensaje de error
